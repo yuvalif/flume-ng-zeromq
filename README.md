@@ -4,7 +4,7 @@ Custom flume-ng source to pull data from ZeroMQ. Note that it assumes PUSH/PULL 
 To build use `mvn package` (note that Java 8 is needed). 
 
 ## Install to flume-ng
-This was tested with: flume-ng 1.8, jermq 0.4.3 0.4.4. 
+This was tested with: flume-ng 1.8/1.7/1.6, , jermq 0.4.4. 
 
 The generated JAR needs to be copied to the the plugin directory: 
 
