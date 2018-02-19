@@ -1,11 +1,21 @@
 # flume-ng-zeromq
-Custom flume source to pull data from ZeroMQ
+Custom flume-ng source to pull data from ZeroMQ. Note that it assumes PUSH/PULL message scheme.
 
-To build use `mvn package` (note that java 8 is needed). This was tested with: flume-ng 1.8, jermq 0.4.3
+To build use `mvn package` (note that Java 8 is needed). 
 
-The generated jar needs to be copied to: `<flume-ng>/plugins.d/flume-ng-zeromq/lib`
+## Install to flume-ng
+This was tested with: flume-ng 1.8/1.7/1.6 and jermq 0.4.4/0.4.3.
 
-The jeromq jar (zeromq inplementation in java) should also be added there as an external dependency: `<flume-ng>/plugins.d/flume-ng-zeromq/libext`
+The generated JAR needs to be copied to the the plugin directory: 
+
+`<flume-ng-home>/plugins.d/flume-ng-zeromq/lib`
+
+The jeromq (zeromq inplementation in Java) JAR should also be added there as an external dependency: 
+
+`<flume-ng-home>/plugins.d/flume-ng-zeromq/libext`
+
+jeromq JAR could be fetched from here: http://central.maven.org/maven2/org/zeromq/jeromq/0.3.4/jeromq-0.3.4.jar (version 0.4.3),
+or built from source https://github.com/zeromq/jeromq (version 0.4.4).
 
 ## Configuration Sample
 ```
@@ -13,5 +23,3 @@ a1.sources.r1.type = org.apache.flume.source.zeromq.ZeroMQSource
 a1.sources.r1.port = 5555
 a1.sources.r1.hostname = 127.0.0.1
 ```
-
-
