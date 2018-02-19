@@ -27,11 +27,11 @@ public class ZeroMQSource extends AbstractEventDrivenSource implements ZeroMQPul
         port = context.getInteger(CONF_PORT);
         // validate port number
         if (port < 1024 || port > 65535) {
-            throw new IllegalArgumentException("Illegal Port Specified: "+ port);
+            throw new IllegalArgumentException("Illegal port specified: " + port + " for source " + getName() + ".");
         }
         // TODO: validate hostname
         hostname = context.getString(CONF_HOST);
-        LOG.info("0MQ source successfully configured.");
+        LOG.info("0MQ source " + getName() + " successfully configured.");
         if (sourceCounter == null) {
             sourceCounter = new SourceCounter(getName());
         }
@@ -42,14 +42,16 @@ public class ZeroMQSource extends AbstractEventDrivenSource implements ZeroMQPul
         try {
             context = ZMQ.context(1);
             socket = context.socket(ZMQ.PULL);
+            //TODO: check bind return value
             socket.bind("tcp://" + this.hostname + ":" + this.port);
             zeromqstart(socket);
             super.start();
             sourceCounter.start();
         } catch(Exception e) {
             System.out.println(e);
+            // TODO: throw exception
         }
-        LOG.info("0MQ source successfully started.");
+        LOG.info("0MQ source " + getName() + " successfully started.");
     }
 
     //@override
