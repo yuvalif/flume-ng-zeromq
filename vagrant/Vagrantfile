@@ -1,0 +1,30 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "fedora/28-cloud-base"
+ 
+  # use libvirt
+  config.vm.provider "libvirt" do |lv|
+    lv.memory = "2048"
+  end
+
+  # machine level provisioning
+  config.vm.provision "shell", inline: <<-SHELL
+    dnf install -y wget
+    dnf install -y java-1.8.0-openjdk.x86_64
+    dnf install -y python
+    pip install pyzmq-static
+    sudo -u vagrant bash -c 'wget -nv -N https://www-us.apache.org/dist/flume/1.8.0/apache-flume-1.8.0-bin.tar.gz'
+    sudo -u vagrant bash -c 'tar xfz apache-flume-1.8.0-bin.tar.gz'
+    sudo -u vagrant bash -c 'mkdir -p apache-flume-1.8.0-bin/plugins.d/flume-ng-zeromq/libext'
+    sudo -u vagrant bash -c 'mkdir -p apache-flume-1.8.0-bin/plugins.d/flume-ng-zeromq/lib'
+    sudo -u vagrant bash -c 'wget -nv -N http://central.maven.org/maven2/org/zeromq/jeromq/0.3.4/jeromq-0.3.4.jar'
+    sudo -u vagrant bash -c 'cp jeromq-0.3.4.jar apache-flume-1.8.0-bin/plugins.d/flume-ng-zeromq/libext/'
+  SHELL
+  config.vm.provision "file", source: "../example.conf", destination: "example.conf"
+  config.vm.provision "file", source: "./log4j.properties", destination: "log4j.properties"
+  config.vm.provision "file", source: "./zmq-client.py", destination: "zmq-client.py"
+  config.vm.provision "file", source: "../target/flume-zeromq-source-1.0.jar", destination: "apache-flume-1.8.0-bin/plugins.d/flume-ng-zeromq/lib/flume-zeromq-source-1.0.jar"
+end
+
